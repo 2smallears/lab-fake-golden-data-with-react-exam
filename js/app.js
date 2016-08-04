@@ -49,7 +49,7 @@ const Left = React.createClass({
     const items = this.props.items.map((item, index) => {
       return <div key={index}>
         <input type={item} />
-        <button onClick={this.delete}>X</button>
+        <button onClick={this.delete.bind(this, index)}>X</button>
       </div>
     })
     return <div>
