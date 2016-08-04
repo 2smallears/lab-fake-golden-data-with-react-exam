@@ -15,12 +15,17 @@ const App = React.createClass({
     items.push(item);
     this.setState({items});
   },
+  deleteItem: function (index) {
+    const items = this.state.items;
+    items.splice(index, 1);
+    this.setState({items});
+  },
   render: function() {
       const isEdit = this.state.isEdit;
       return <div>
           <button onClick={this.toggle}>{isEdit ? "Preview" : "Edit"}</button>
           <div className={isEdit ? "" : "hidden"}>
-              <Edit items={this.state.items} onAdd={this.addItem}/>
+              <Edit items={this.state.items} onAdd={this.addItem} onDelete={this.deleteItem}/>
           </div>
           <div className={isEdit ? "hidden" : ""}>
               <Preview />
@@ -32,17 +37,21 @@ const App = React.createClass({
 const Edit = React.createClass({
   render: function() {
     return <div>
-      <Left items={this.props.items}/>
+      <Left items={this.props.items} onDelete={this.props.onDelete}/>
       <Right onAdd={this.props.onAdd}/>
     </div>;
   }
 });
 
 const Left = React.createClass({
+  delete: function (index) {
+      this.props.onDelete(index);
+  },
   render: function () {
       const items = this.props.items.map((item, index) => {
          return <div key={index}>
              <input type={item}/>
+             <button onClick={this.delete}>X</button>
          </div>
       })
       return <div>
