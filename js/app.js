@@ -21,21 +21,29 @@ const App = React.createClass({
   render: function() {
     const isEdit = this.state.isEdit;
     return <div>
-      <button onClick={this.toggle}>{isEdit ? "Preview" : "Edit"}</button>
-      <div className={isEdit ? "" : "hidden"}>
-        <Edit onAdd={this.add} items={this.state.items} onDelete={this.delete}/>
+      <div className="row">
+        <button className="btn btn-primary center-block" onClick={this.toggle}>{isEdit ? "Preview" : "Edit"}</button>
       </div>
-      <div className={isEdit ? "hidden" : ""}>
-        <Preview items={this.state.items}/>
+      <div className="row">
+        <div className={isEdit ? "" : "hidden"}>
+          <Edit onAdd={this.add} items={this.state.items} onDelete={this.delete}/>
+        </div>
+        <div className={isEdit ? "hidden" : ""}>
+          <Preview items={this.state.items}/>
+        </div>
       </div>
     </div>;
   }
 });
 const Edit = React.createClass({
   render: function() {
-    return <div>
-      <Left items={this.props.items} onDelete={this.props.onDelete}/>
-      <Right onAdd={this.props.onAdd}/>
+    return <div className="row">
+      <div className="col-md-6" id="left">
+        <Left items={this.props.items} onDelete={this.props.onDelete}/>
+      </div>
+      <div className="col-md-6" id="right">
+        <Right onAdd={this.props.onAdd}/>
+      </div>
     </div>;
   }
 });
@@ -45,9 +53,9 @@ const Left = React.createClass({
   },
   render: function() {
     const items = this.props.items.map((item, index) => {
-      return <div key={index}>
+      return <div key={index} className="item">
         <input type={item} />
-        <button onClick={this.delete.bind(this, index)}>X</button>
+        <button onClick={this.delete.bind(this, index)} className="glyphicon glyphicon-minus btn btn-default"></button>
       </div>
     })
     return <div>
@@ -64,19 +72,22 @@ const Right = React.createClass({
     return <div>
       <input type="radio" name="item" value="text"/>text
       <input type="radio" name="item" value="date"/>date
-      <button onClick={this.add}>+</button>
+      <button onClick={this.add} className="glyphicon glyphicon-plus btn btn-primary" id="add-btn"></button>
     </div>;
   }
 });
 const Preview = React.createClass({
   render: function() {
     const items = this.props.items.map((item, index) => {
-      return <div key={index}>
+      return <div key={index} className="item">
         <input type={item} />
       </div>
     })
-    return <div>
-      {items}
+    return <div id="preview">
+      <div id="result">
+        {items}
+      </div>
+      <button className="btn btn-primary" id="submit">Submit</button>
     </div>;
   }
 });
