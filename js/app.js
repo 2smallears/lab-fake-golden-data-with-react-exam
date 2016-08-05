@@ -1,7 +1,6 @@
 const App = React.createClass({
   getInitialState: function () {
     return {
-      isEdit: true,
       items: []
     }
   },
@@ -79,7 +78,7 @@ const Preview = React.createClass({
       </div>
     })
     return <div id="preview">
-      <ReactRouter.Link to="/Edit">
+      <ReactRouter.Link to="/">
         Edit
       </ReactRouter.Link>
       <div id="result">
@@ -94,7 +93,6 @@ ReactDOM.render(
       <ReactRouter.Route path="/" component={App}>
         <ReactRouter.IndexRoute component={Edit}/>
         <ReactRouter.Route path="Preview" component={Preview} />
-        <ReactRouter.Route path="Edit" component={Edit} />
       </ReactRouter.Route>
     </ReactRouter.Router>
     , document.getElementById('content'));
