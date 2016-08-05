@@ -5,9 +5,6 @@ const App = React.createClass({
       items: []
     }
   },
-  toggle: function () {
-    this.setState({isEdit: !this.state.isEdit});
-  },
   add: function (item) {
     const items = this.state.items;
     items.push(item);
@@ -19,18 +16,13 @@ const App = React.createClass({
     this.setState({items});
   },
   render: function() {
-    const isEdit = this.state.isEdit;
     return <div>
       <div className="row">
-        <button className="btn btn-primary center-block" onClick={this.toggle}>{isEdit ? "Preview" : "Edit"}</button>
-      </div>
-      <div className="row">
-        <div className={isEdit ? "" : "hidden"}>
-          <Edit onAdd={this.add} items={this.state.items} onDelete={this.delete}/>
-        </div>
-        <div className={isEdit ? "hidden" : ""}>
-          <Preview items={this.state.items}/>
-        </div>
+        {this.props.children && React.cloneElement(this.props.children, {
+          items: this.state.items,
+          onAdd: this.add,
+          onDelete: this.delete
+        })}
       </div>
     </div>;
   }
@@ -38,6 +30,9 @@ const App = React.createClass({
 const Edit = React.createClass({
   render: function() {
     return <div className="row">
+      <ReactRouter.Link to="/Preview">
+        Preview
+      </ReactRouter.Link>
       <div className="col-md-6" id="left">
         <Left items={this.props.items} onDelete={this.props.onDelete}/>
       </div>
@@ -84,6 +79,9 @@ const Preview = React.createClass({
       </div>
     })
     return <div id="preview">
+      <ReactRouter.Link to="/Edit">
+        Edit
+      </ReactRouter.Link>
       <div id="result">
         {items}
       </div>
@@ -91,4 +89,12 @@ const Preview = React.createClass({
     </div>;
   }
 });
-ReactDOM.render(<App />, document.getElementById('content'));
+ReactDOM.render(
+    <ReactRouter.Router>
+      <ReactRouter.Route path="/" component={App}>
+        <ReactRouter.IndexRoute component={Edit}/>
+        <ReactRouter.Route path="Preview" component={Preview} />
+        <ReactRouter.Route path="Edit" component={Edit} />
+      </ReactRouter.Route>
+    </ReactRouter.Router>
+    , document.getElementById('content'));
